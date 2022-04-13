@@ -1,0 +1,31 @@
+#!/bin/bash
+
+FILES=$*
+MAIN=$1
+MAIN_NAME=${MAIN%.java}
+
+function toClass() {
+    echo $* | 
+        sed -r 's/\.java/\.class/gi'
+}
+
+CLASS_FILES="`toClass $FILES`"
+
+function toJarCase() {
+    echo $1 |
+        sed -r 's/\/([A-Z])/\/\L\1/g' |
+        sed -r 's/^([A-Z])/\L\1/g'  |
+        sed -r 's/([A-Z])/-\L\1/g'  |
+        sed 's/^_//'
+}
+echo $MAIN_NAME
+JAR_FILE="`toJarCase $MAIN_NAME.jar`"
+
+mkdir tmp
+javac $FILES --class-path=tmp
+CLASS_FILED="`ls tmp/**.java`"
+echo $CLASS_FILES
+jar --create --main-class=$MAIN_NAME --file=../html/$JAR_FILE $CLASS_FILES
+chmod +x ../html/$JAR_FILE
+
+rm $CLASS_FILES
