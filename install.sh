@@ -2,7 +2,7 @@
 
 INSTALL_DIR="/usr/lib/httpserver"
 
-# checl if root
+# check if root
 if [ $EUID == 0 ]; then
     echo "Don't run this as root, you will be prompted";
     exit 2;
