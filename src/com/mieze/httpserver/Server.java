@@ -194,16 +194,13 @@ public class Server implements Runnable {
                         }
 
                         @Override
-                        public void get(HashMap<String, String> args) {
+                        public void request(HashMap<String, String> args) {
                             echof("<html><head></head><body>Time: %s</body>", System.currentTimeMillis());
+                            String method = getMethod();
                             // GET code here
                         }
-
-                        @Override
-                        public void post(HashMap<String, String> args) {
-                            // POST code here
-                        }
                     }
+                    
                     \033[0m
 
                     Options:

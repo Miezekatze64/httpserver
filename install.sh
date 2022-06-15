@@ -62,5 +62,5 @@ echo ""
 if [ $? == 0 ]; then
     echo "Sucessfully installed httpserver"
 else
-    echo "Installation FAILES"
+    echo "Installation FAILED"
 fi
