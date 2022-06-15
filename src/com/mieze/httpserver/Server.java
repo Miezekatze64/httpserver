@@ -180,7 +180,7 @@ public class Server implements Runnable {
                     To start a simple http server in the current directory, just run \033[2;3;33m`httpserver`\033[0m
 
                     To create a .jar file, wich produces an HTML page, you could just place it into your web root, \033[3mbut\033[0m
-                    it is recommended to use the \033[2;3;33m`jar-hhtpserver --configure [DIR]`\033[0m option to
+                    it is recommended to use the \033[2;3;33m`httpserver --configure [DIR]`\033[0m option to
                     create a shell script used for compiling your java files with the included \033[2;3;33m`Page`\033[0m class.
 
                     Example of a java class:
