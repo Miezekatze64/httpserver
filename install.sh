@@ -9,35 +9,36 @@ if [ $EUID == 0 ]; then
 fi
 
 # compile webserver
+echo "Compiling:"
 ./compile.sh
 EXIT=$?
 
 if [ $EXIT != 0 ]; then
-    echo "Installation failed"
+    echo "[E] Installation failed"
     exit $EXIT
 fi
-echo "Compiled sources"
+echo -e "[-] Compiled sources\n"
 
-ls ./httpserver.jar > /dev/null
-if [ $? != 0 ]; then
-    echo "File httpserver.jar not found"
-    exit 3;
-fi
+function check_file() {
+    if [ ! -e $1 ]; then
+        echo "[EROOR] File $1 not found"
+        exit 255;
+    fi
+}
 
-ls ./page-src > /dev/null
-if [ $? != 0 ]; then
-    echo "page-src directory not found"
-    exit 3;
-fi
+check_file ./httpserver.jar
+check_file ./page-src
 
 function installation() {
-    install -d $INSTALL_DIR
-    install ./httpserver.jar $INSTALL_DIR
-    install -d $INSTALL_DIR/page-src/com/mieze/httpserver
+    echo "[+] creating folders..."
+    install -d $INSTALL_DIR || return 1
+    install -d $INSTALL_DIR/page-src/com/mieze/httpserver || return 1
+    echo "[+] installing files..."
+    install ./httpserver.jar $INSTALL_DIR || return 1
     ls ./page-src/com/mieze/httpserver/* | while read LINE; do
-        install $LINE $INSTALL_DIR/$LINE
+        install $LINE $INSTALL_DIR/$LINE || return 1
     done
-    echo "copied sources to $INSTALL_DIR"
+    echo "[+] copied sources to $INSTALL_DIR"
 
 cat<<EOF>/usr/bin/httpserver
 #!/bin/bash
@@ -45,22 +46,20 @@ cat<<EOF>/usr/bin/httpserver
 java -jar $INSTALL_DIR/httpserver.jar \$*
 EOF
     
-    EXIT=$?
-    if [ $EXIT != 0 ]; then
-        echo "Could not create /usr/bin/httpserver";
-         exit $EXIT
+    if [ $? != 0 ]; then
+        echo "[E] Could not create /usr/bin/httpserver";
+        exit 1
     fi
     
     chmod +x /usr/bin/httpserver
-    echo "created launch script"
+    echo "[+] created launch script"
 }
-echo ""
-echo "Waiting for root permissions..."
+
+echo "Requesting root permissions:"
 sudo bash -c "$(declare -f installation); INSTALL_DIR=$INSTALL_DIR; installation"
 
-echo ""
 if [ $? == 0 ]; then
-    echo "Sucessfully installed httpserver"
+    echo -e "\n[*] Sucessfully installed httpserver"
 else
-    echo "Installation FAILED"
+    echo -e "\n[E] Installation FAILED"
 fi

@@ -9,19 +9,19 @@ function gen_jar() {
     chmod +x httpserver.jar
 }
 
-echo "Starting compilation..."
+echo "[-] Starting compilation..."
 cd ./src/
 if javac com/mieze/httpserver/*.java -d ../tmp/; then
-    echo "Compilation finished (.class files in ./bin/)"
-    echo "run ./run.sh to run project"
+    echo "[-] Compilation finished (.class files in ./bin/)"
+    echo "[-] run ./run.sh to run project"
 	cd ..
 	if ! gen_jar; then
-		echo "jar creation FAILED. (See errors above...)"
-		exit -1
+		echo "[E] jar creation FAILED. (See errors above...)"
+		exit 1
 	fi
 else
-    echo "Compilation FAILED. (See errors above...)"
-    exit -1
+    echo "[E] Compilation FAILED. (See errors above...)"
+    exit 1
 fi
 rm -rf tmp
 exit 0
