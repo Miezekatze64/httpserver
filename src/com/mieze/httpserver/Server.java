@@ -390,7 +390,11 @@ public class Server implements Runnable {
     private String getContentType(String file) {
         if (file.endsWith(".html") || file.endsWith(".html"))
             return "text/html";
+        if (file.endsWith(".png")) return "image/png";
         if (file.endsWith(".jar")) return "java/jar";
+        if (file.endsWith(".jpg") || file.endsWith(".jpeg")) return "image/jpeg";
+        if (file.endsWith(".wasm")) return "application/wasm";
+        if (file.endsWith(".pdf")) return "application/pdf";
         return "text/plain";
     }
 
