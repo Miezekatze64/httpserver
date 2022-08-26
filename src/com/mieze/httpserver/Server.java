@@ -395,6 +395,7 @@ public class Server implements Runnable {
         if (file.endsWith(".jpg") || file.endsWith(".jpeg")) return "image/jpeg";
         if (file.endsWith(".wasm")) return "application/wasm";
         if (file.endsWith(".pdf")) return "application/pdf";
+        if (file.endsWith(".js")) return "text/javascript";
         return "text/plain";
     }
 
